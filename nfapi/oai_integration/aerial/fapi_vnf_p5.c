@@ -55,10 +55,8 @@ void *aerial_vnf_nr_aerial_p7_start_thread(void *ptr)
 void *aerial_vnf_nr_p7_thread_start(void *ptr)
 {
   // set_thread_priority(79);
-<<<<<<< Updated upstream
  
-=======
-  int s;
+//  int s;
 //  cpu_set_t cpuset;
 
 //  CPU_SET(8, &cpuset);
@@ -66,7 +64,6 @@ void *aerial_vnf_nr_p7_thread_start(void *ptr)
 //  if (s != 0)
 //    printf("failed to set afinity\n");
 
->>>>>>> Stashed changes
   set_priority(79);
 
   pthread_attr_t ptAttr;
