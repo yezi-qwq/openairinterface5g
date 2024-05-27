@@ -55,7 +55,18 @@ void *aerial_vnf_nr_aerial_p7_start_thread(void *ptr)
 void *aerial_vnf_nr_p7_thread_start(void *ptr)
 {
   // set_thread_priority(79);
+<<<<<<< Updated upstream
  
+=======
+  int s;
+//  cpu_set_t cpuset;
+
+//  CPU_SET(8, &cpuset);
+//  s = pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+//  if (s != 0)
+//    printf("failed to set afinity\n");
+
+>>>>>>> Stashed changes
   set_priority(79);
 
   pthread_attr_t ptAttr;
@@ -745,11 +756,8 @@ int oai_fapi_dl_tti_req(nfapi_nr_dl_tti_request_t *dl_config_req)
 
 int oai_fapi_send_end_request(int cell, uint32_t frame, uint32_t slot){
   nfapi_vnf_p7_config_t *p7_config = aerial_vnf.p7_vnfs[0].config;
-  nfapi_nr_slot_indication_scf_t *nr_slot_resp = CALLOC(1, sizeof(*nr_slot_resp));
-  nr_slot_resp->header.message_id = 0x8F;
-  nr_slot_resp->sfn = frame;
-  nr_slot_resp->slot = slot;
-  int retval = fapi_nr_pack_and_send_p7_message((vnf_p7_t *)p7_config, &nr_slot_resp->header);
+  nfapi_nr_slot_indication_scf_t nr_slot_resp = {.header.message_id = 0x8F, .sfn = frame, .slot = slot};
+  int retval = fapi_nr_pack_and_send_p7_message((vnf_p7_t *)p7_config, &nr_slot_resp.header);
   if (retval != 0) {
     LOG_E(PHY, "%s() Problem sending retval:%d\n", __FUNCTION__, retval);
   }

@@ -4,9 +4,9 @@
 cuBB_Path="${cuBB_SDK:-/opt/nvidia/cuBB}"
 
 # Run gdrcopy insmod
-cd "$cuBB_Path"/cuPHY-CP/external/gdrcopy/ || exit 1
+# cd "$cuBB_Path"/cuPHY-CP/external/gdrcopy/ || exit 1
 
-./insmod.sh
+# ./insmod.sh
 cd "$cuBB_Path" || exit 1
 # Add gdrcopy to LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/opt/mellanox/dpdk/lib/x86_64-linux-gnu:/opt/mellanox/doca/lib/x86_64-linux-gnu:/opt/nvidia/cuBB/cuPHY-CP/external/gdrcopy/build/x86_64/
@@ -21,8 +21,8 @@ export CUDA_MPS_LOG_DIRECTORY=/var
 echo quit | nvidia-cuda-mps-control
 
 # Start MPS
-nvidia-cuda-mps-control -d
-echo start_server -uid 0 | nvidia-cuda-mps-control
+sudo -E nvidia-cuda-mps-control -d
+sudo -E echo start_server -uid 0 | sudo -E nvidia-cuda-mps-control
 
 # Start cuphycontroller_scf
 # Check if an argument is provided
@@ -34,4 +34,12 @@ else
     argument="$1"
 fi
 
-"$cuBB_Path"/build/cuPHY-CP/cuphycontroller/examples/cuphycontroller_scf "$argument"
+#sed -i "s/ nic:.*/ nic: 0000:cc:00.1/" ${cuBB_SDK}/cuPHY-CP/cuphycontroller/config/cuphycontroller_P5G_FXN_R750.yaml
+#sed -i "s/ dst_mac_addr:.*/ dst_mac_addr: 6c:ad:ad:00:04:6c/" ${cuBB_SDK}/cuPHY-CP/cuphycontroller/config/cuphycontroller_P5G_FXN_R750.yaml
+sed -i "s/ nic:.*/ nic: 0000:b5:00.0/" ${cuBB_SDK}/cuPHY-CP/cuphycontroller/config/cuphycontroller_P5G_FXN.yaml
+sed -i "s/ dst_mac_addr:.*/ dst_mac_addr: 6c:ad:ad:00:04:6c/" ${cuBB_SDK}/cuPHY-CP/cuphycontroller/config/cuphycontroller_P5G_FXN.yaml
+
+sudo -E "$cuBB_Path"/build/cuPHY-CP/cuphycontroller/examples/cuphycontroller_scf P5G_FXN
+sudo ./build/cuPHY-CP/gt_common_libs/nvIPC/tests/pcap/pcap_collect
+sudo mv nvipc.pcap /var/log/aerial/
+sleep infinity

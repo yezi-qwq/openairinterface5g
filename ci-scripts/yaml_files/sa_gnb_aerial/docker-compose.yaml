@@ -24,10 +24,11 @@ services:
       - ../../../cmake_targets/share:/opt/cuBB/share
     userns_mode: host
     ipc: "shareable"
-    image: cubb-build:23-2
+    image: cubb-build:23-4
     environment:
       - cuBB_SDK=/opt/nvidia/cuBB
-    command: bash -c " rm -rf /tmp/phy.log && chmod +x /opt/nvidia/cuBB/aerial_l1_entrypoint.sh && /opt/nvidia/cuBB/aerial_l1_entrypoint.sh"
+    command: bash -c " sudo rm -rf /tmp/phy.log && sudo chmod +x /opt/nvidia/cuBB/aerial_l1_entrypoint.sh && /opt/nvidia/cuBB/aerial_l1_entrypoint.sh"
+#    command: bash -c "sleep infinity"
     healthcheck:
       test: ["CMD-SHELL",'grep -q "L1 is ready!" /tmp/phy.log && echo 0 || echo 1']
       interval: 20s
@@ -35,7 +36,7 @@ services:
       retries: 5
   oai-gnb-aerial:
     cpuset: "13-20"
-    image: oai-gnb-aerial:latest
+    image: oai-gnb-aerial:w15 # oai-gnb-aerial:latest
     depends_on:
       nv-cubb:
         condition: service_healthy
@@ -57,6 +58,9 @@ services:
     tty: true
     volumes:
       - ../../conf_files/gnb-vnf.sa.band78.273prb.aerial.conf:/opt/oai-gnb/etc/gnb.conf
+      - /var/log/aerial:/var/log/aerial
+    command: bash -c "chrt -f 99 /opt/oai-gnb/bin/nr-softmodem -O /opt/oai-gnb/etc/gnb.conf | ts | tee /var/log/aerial/oai.log"
+#    command: bash -c "/opt/oai-gnb/bin/nr-softmodem -O /opt/oai-gnb/etc/gnb.conf | ts | tee /var/log/aerial/oai.log"
     container_name: oai-gnb-aerial
     healthcheck:
       test: /bin/bash -c "ps aux | grep -v grep | grep -c softmodem"

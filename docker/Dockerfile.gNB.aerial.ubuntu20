@@ -47,6 +47,11 @@ COPY . .
 RUN /bin/sh oaienv && \
     tar -xvzf nvipc_src.*.tar.gz && \
     cd nvipc_src.* && \
+<<<<<<< Updated upstream
+=======
+#    git init && \
+#    git apply ../cmake_targets/tools/install_libraries_to_system.patch --verbose && \
+>>>>>>> Stashed changes
     rm -rf build && mkdir build && cd build && \
     cmake .. -DNVIPC_DPDK_ENABLE=OFF -DNVIPC_DOCA_ENABLE=OFF -DNVIPC_CUDA_ENABLE=OFF -DENABLE_SLT_RSP=ON && \
     make -j && make install
@@ -76,6 +81,7 @@ RUN apt-get update && \
         iperf \
         iproute2 \
         iputils-ping \
+        moreutils \
         gdb \
         libusb-1.0-0 && \
     rm -rf /var/lib/apt/lists/*
@@ -98,4 +104,4 @@ COPY --from=ran-build \
 WORKDIR /opt/oai-gnb
 COPY --from=ran-build /tini /tini
 ENTRYPOINT ["/tini", "-v", "--", "/opt/oai-gnb/bin/entrypoint.sh"]
-CMD ["/opt/oai-gnb/bin/nr-softmodem", "-O", "/opt/oai-gnb/etc/gnb.conf"]
+#CMD ["/opt/oai-gnb/bin/nr-softmodem", "-O", "/opt/oai-gnb/etc/gnb.conf"]
