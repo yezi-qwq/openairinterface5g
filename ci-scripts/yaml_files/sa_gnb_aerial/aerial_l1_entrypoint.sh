@@ -3,10 +3,7 @@
 # Check if cuBB_SDK is defined, if not, use default path
 cuBB_Path="${cuBB_SDK:-/opt/nvidia/cuBB}"
 
-# Run gdrcopy insmod
-# cd "$cuBB_Path"/cuPHY-CP/external/gdrcopy/ || exit 1
 
-# ./insmod.sh
 cd "$cuBB_Path" || exit 1
 # Add gdrcopy to LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/opt/mellanox/dpdk/lib/x86_64-linux-gnu:/opt/mellanox/doca/lib/x86_64-linux-gnu:/opt/nvidia/cuBB/cuPHY-CP/external/gdrcopy/build/x86_64/
