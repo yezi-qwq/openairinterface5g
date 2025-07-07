@@ -158,7 +158,7 @@ int nr_pusch_channel_estimation(PHY_VARS_gNB *gNB,
     c16_t *ul_ch = &ul_ch_estimates[nl * gNB->frame_parms.nb_antennas_rx + aarx][symbol_offset];
 
     // saving csi to a csv file for testing
-    FILE *fp_dmrs = fopen("/tmp/csi_dmrs.csv", "a");
+    FILE *fp_dmrs = fopen("/home/jack/tmp/csi_dmrs.csv", "a");
     if (fp_dmrs != NULL) {
       for (int sc = 0; sc < symbolSize; sc++) {
         fprintf(fp_dmrs, "%d,%d,%d\n", sc, ul_ch[sc].r, ul_ch[sc].i);
@@ -898,7 +898,7 @@ int nr_srs_channel_estimation(
 #endif
 
   // saving csi to a csv file for testing
-  FILE *fp_srs = fopen("/tmp/csi_srs.csv", "a");
+  FILE *fp_srs = fopen("/home/jack/tmp/csi_srs.csv", "a");
   if (fp_srs != NULL) {
       for (int sc = 0; sc < frame_parms->ofdm_symbol_size; sc++) {
           fprintf(fp_srs, "%d,%d,%d\n", sc,
